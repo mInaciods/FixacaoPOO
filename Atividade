@@ -1,0 +1,156 @@
+using System;
+using System.Collections.Generic;
+
+abstract class Animal
+{
+    public string Nome;
+    private int _idade;
+
+    public int Idade
+    {
+        get => _idade;
+        set => _idade = value < 0 ? 0 : value;
+    }
+
+    public abstract void EmitirSom();
+
+    public virtual void Apresentar()
+    {
+        Console.WriteLine($"Nome: {Nome}, Idade: {Idade}");
+    }
+}
+
+class Cachorro : Animal
+{
+    public override void EmitirSom()
+    {
+        Console.WriteLine("Au au!");
+    }
+}
+
+class Gato : Animal
+{
+    public override void EmitirSom()
+    {
+        Console.WriteLine("Miau!");
+    }
+}
+
+class Passaro : Animal
+{
+    public override void EmitirSom()
+    {
+        Console.WriteLine("GA! BI! GOL!");
+    }
+
+    public void Voar()
+    {
+        Console.WriteLine("O pássaro está voando!");
+    }
+}
+
+class Veterinario
+{
+    private string _especialidade;
+
+    public string Especialidade
+    {
+        get => _especialidade;
+        set
+        {
+            if (value == "Felinos" || value == "Caninos")
+            {
+                _especialidade = value;
+            }
+            else
+            {
+                throw new ArgumentException("Especialidade deve ser 'Felinos' ou 'Caninos'.");
+            }
+        }
+    }
+
+    public void Examinar(Animal animal)
+    {
+        animal.EmitirSom();
+    }
+}
+
+class Zoo
+{
+    private List<Animal> _animais = new List<Animal>();
+
+    public void AdicionarAnimal(Animal animal)
+    {
+        _animais.Add(animal);
+    }
+
+    public void ApresentarAnimais()
+    {
+        foreach (var animal in _animais)
+        {
+            animal.Apresentar();
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Zoo zoo = new Zoo();
+        bool continuar = true;
+
+        while (continuar)
+        {
+            Console.WriteLine("Escolha uma opção:");
+            Console.WriteLine("1. Adicionar Cachorro");
+            Console.WriteLine("2. Adicionar Gato");
+            Console.WriteLine("3. Adicionar Pássaro");
+            Console.WriteLine("4. Apresentar Animais");
+            Console.WriteLine("5. Sair");
+            string opcao = Console.ReadLine();
+
+            switch (opcao)
+            {
+                case "1":
+                    var cachorro = new Cachorro();
+                    Console.Write("Nome do cachorro: ");
+                    cachorro.Nome = Console.ReadLine();
+                    Console.Write("Idade do cachorro: ");
+                    cachorro.Idade = int.Parse(Console.ReadLine());
+                    zoo.AdicionarAnimal(cachorro);
+                    break;
+
+                case "2":
+                    var gato = new Gato();
+                    Console.Write("Nome do gato: ");
+                    gato.Nome = Console.ReadLine();
+                    Console.Write("Idade do gato: ");
+                    gato.Idade = int.Parse(Console.ReadLine());
+                    zoo.AdicionarAnimal(gato);
+                    break;
+
+                case "3":
+                    var passaro = new Passaro();
+                    Console.Write("Nome do pássaro: ");
+                    passaro.Nome = Console.ReadLine();
+                    Console.Write("Idade do pássaro: ");
+                    passaro.Idade = int.Parse(Console.ReadLine());
+                    zoo.AdicionarAnimal(passaro);
+                    break;
+
+                case "4":
+                    zoo.ApresentarAnimais();
+                    break;
+
+                case "5":
+                    continuar = false;
+                    break;
+
+                default:
+                    Console.WriteLine("Opção inválida. Tente novamente.");
+                    break;
+            }
+        }
+    }
+}
